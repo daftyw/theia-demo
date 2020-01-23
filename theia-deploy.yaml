@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: theia-app
+  namespace: theia 
+spec:
+  replicas: 1 
+  selector:
+    matchLabels:
+      app: theia-app
+  template:
+    metadata:
+      labels:
+        app: theia-app
+    spec:
+      containers:
+      - name: theia-app-cont
+        image: theiaide/theia:next
+        resources:
+          limits:
+            memory: "1024Mi"
+            cpu: "2"
+          requests:
+            memory: "512Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 3000
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: theia-service
+  namespace: theia
+spec:
+  selector:
+    app: theia-app
+  ports:
+  - port: 3000
+    targetPort: 3000
